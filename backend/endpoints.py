@@ -1,6 +1,6 @@
 # endpoints.py
 from flask import request, jsonify, Blueprint
-from datetime import datetime
+from datetime import datetime, timezone
 from models import db, Drawer, Alarm, Medications
 
 # Create a Blueprint for routes
@@ -64,14 +64,30 @@ def manage_medications():
     
     return jsonify({'message': 'Medication data saved'}), 201
 
-# Endpoint for getting medication details by ID
-@api.route('/medications/<int:id>', methods=['GET'])
-def get_medication(id):
-    medication = Medications.query.get(id)
+@api.route('/medications', methods=['GET'])
+def get_medication():
+    medication = Medications.query.order_by(Medications.id.desc()).first()
+    
     if medication:
         return jsonify({
-            'last_dose': medication.last_dose,
+            'last_dose': medication.last_dose, 
             'next_dose': medication.next_dose,
             'delay_minutes': medication.delay_minutes
         }), 200
     return jsonify({'message': 'Medication not found'}), 404
+
+
+#ToDo: meds_taken edpoint fix
+
+@api.route('/meds-taken', methods=['GET'])
+def check_meds_taken():
+    # Znajdź ostatni wpis w tabeli Medications
+    medication = Medications.query.order_by(Medications.id.desc()).first()
+    
+    if not medication:
+        return jsonify({'meds_taken': False}), 404
+    
+    # Sprawdź, czy aktualny czas >= next_dose
+    meds_taken = datetime.now(timezone.utc) >= medication.next_dose
+    
+    return jsonify({'meds_taken': meds_taken}), 200

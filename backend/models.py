@@ -32,3 +32,8 @@ class Medications(db.Model):
     
     def __repr__(self):
         return f"<Medications(id={self.id}, last_dose={self.last_dose}, next_dose={self.next_dose}, delay_minutes={self.delay_minutes})>"
+    
+class MedsTaken(db.Model):
+    __tablename__ = 'meds_taken'
+    id = db.Column(db.Integer, primary_key=True)
+    meds_taken = db.Column(db.Boolean, nullable=False, default=False)
