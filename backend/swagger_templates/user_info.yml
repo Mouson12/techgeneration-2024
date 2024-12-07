@@ -1,0 +1,57 @@
+# swagger_templates/user_info.yml
+---
+tags:
+  - User
+summary: Get user information
+description: Returns detailed information about the currently authenticated user.
+operationId: getUserInfo
+responses:
+  200:
+    description: User information retrieved successfully.
+    schema:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 123
+          description: Unique identifier for the user.
+        username:
+          type: string
+          example: "john_doe"
+          description: The username of the user.
+        email:
+          type: string
+          example: "john.doe@example.com"
+          description: The email address of the user.
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-11-01T12:00:00Z"
+          description: The timestamp of when the user account was created.
+        devices:
+          type: array
+          items:
+            type: object
+            properties:
+              device_id:
+                type: integer
+                example: 101
+                description: Unique identifier for the device.
+              name:
+                type: string
+                example: "Smart Thermostat"
+                description: Name of the device.
+              location:
+                type: string
+                example: "Living Room"
+                description: The location where the device is used.
+  404:
+    description: User not found.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User not found."
+security:
+  - jwt: []

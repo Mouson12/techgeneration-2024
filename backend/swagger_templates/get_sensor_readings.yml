@@ -1,0 +1,41 @@
+# swagger_templates/get_sensor_reading.yml
+---
+tags:
+  - Sensor Readings
+summary: Get sensor readings
+description: Returns sensor readings for a specific sensor.
+operationId: getSensorReading
+parameters:
+  - in: path
+    name: sensor_id
+    required: true
+    type: integer
+    description: The ID of the sensor
+responses:
+  200:
+    description: List of sensor readings
+    schema:
+      type: object
+      properties:
+        sensor_readings:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+                example: 50.5
+              recorded_at:
+                type: string
+                example: "2024-11-11T12:00:00Z"
+              sensor_type:
+                type: string
+                example: "Temperature"
+  404:
+    description: User not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User not found."

@@ -1,0 +1,52 @@
+# swagger_templates/update_device.yml
+---
+tags:
+  - Devices
+summary: Update device information
+description: Updates the name and/or location of a specific device.
+operationId: updateDevice
+parameters:
+  - in: path
+    name: device_id
+    required: true
+    type: integer
+    description: The ID of the device to update.
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "New Device Name"
+          description: The new name of the device.
+        location:
+          type: string
+          example: "Living Room"
+          description: The new location of the device.
+responses:
+  200:
+    description: Device updated successfully.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Device updated successfully."
+  400:
+    description: Bad request.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Name or location must be provided."
+  404:
+    description: Not found.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Device not found."

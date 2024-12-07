@@ -1,0 +1,47 @@
+# swagger_templates/add_user_device.yml
+---
+tags:
+  - User Devices
+summary: Add a device to the user's account
+description: Adds a new device to the user’s devices list.
+operationId: addUserDevice
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      properties:
+        device_id:
+          type: integer
+          example: 101
+          description: The ID of the device to associate with the user.
+      required:
+        - device_id
+responses:
+  200:
+    description: Device added successfully to the user's account.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Device added successfully"
+  400:
+    description: Bad request (e.g., device_id not provided, device already associated).
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Field device_id has to be provided."
+  404:
+    description: Device or user not found.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "There is no device with id = 101."
+security:
+  - jwt: []

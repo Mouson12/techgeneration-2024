@@ -1,0 +1,41 @@
+# docker-compose.yml
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: aura_glass_db
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=aura_glass_db
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - postgres
+    # volumes:
+    # - ./wait-for-db.sh:/wait-for-db.sh
+    entrypoint: ["/app/wait-for-db.sh", "postgres", "flask", "run", "--host=0.0.0.0", "--port=5002"]
+
+  # flask-device:
+  #   build:
+  #     context: ./flask-device
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5001:5001"
+  #   environment:
+  #     - FLASK_ENV=development
+

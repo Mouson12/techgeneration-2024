@@ -1,0 +1,45 @@
+# swagger_templates/login.yml
+---
+tags:
+  - Auth
+summary: User login
+description: Endpoint for user login. Returns a JWT token on successful authentication.
+operationId: loginUser
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: body
+    name: user
+    description: User login details
+    required: true
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "john@example.com"
+        password:
+          type: string
+          example: "password123"
+responses:
+  200:
+    description: Login successful
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Login successful."
+        access_token:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGci..."
+  401:
+    description: Invalid credentials
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Invalid email or password."

@@ -1,0 +1,77 @@
+# swagger_templates/set_sensor_values.yml
+---
+tags:
+  - Sensors
+summary: Update sensor settings
+description: Update the minimum value, maximum value, and measurement frequency of a sensor.
+operationId: setSensorValues
+parameters:
+  - in: path
+    name: sensor_id
+    required: true
+    type: integer
+    description: The ID of the sensor to update
+  - in: body
+    name: sensor_data
+    required: true
+    description: The data to update sensor settings
+    schema:
+      type: object
+      properties:
+        min_value:
+          type: number
+          example: 10
+          description: Minimum threshold value for the sensor
+        max_value:
+          type: number
+          example: 100
+          description: Maximum threshold value for the sensor
+        measurement_frequency:
+          type: integer
+          example: 60
+          description: Frequency of measurements in seconds
+responses:
+  200:
+    description: Sensor values updated successfully
+    schema:
+      type: object
+      properties:
+        sensor_id:
+          type: integer
+          example: 101
+        min_value:
+          type: number
+          example: 10
+        max_value:
+          type: number
+          example: 100
+        measurement_frequency:
+          type: integer
+          example: 60
+  400:
+    description: Bad request - Request body must be JSON or invalid input
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Request body must be JSON"
+  404:
+    description: Sensor or User not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Sensor not found"
+  500:
+    description: Internal server error while saving to the database
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Error saving to the database."
+        error:
+          type: string
+          example: "Database commit error details"

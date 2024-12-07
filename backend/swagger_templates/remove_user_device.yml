@@ -1,0 +1,47 @@
+# swagger_templates/remove_user_device.yml
+---
+tags:
+  - User Devices
+summary: Remove a device from the user's account
+description: Deletes the association between a user and a device using JSON payload.
+operationId: removeUserDevice
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      properties:
+        device_id:
+          type: integer
+          example: 101
+          description: The ID of the device to remove from the user.
+      required:
+        - device_id
+responses:
+  200:
+    description: The device was successfully removed from the user.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Device removed successfully."
+  400:
+    description: Bad request.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Field device_id has to be provided."
+  404:
+    description: Not found.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "There is no device with id = 101."
+security:
+  - jwt: []

@@ -1,0 +1,35 @@
+# swagger_templates/get_user_sensors.yml
+---
+tags:
+  - Sensors
+summary: Get sensors of a device
+description: Returns a list of sensors for a specific device.
+operationId: getUserSensors
+parameters:
+  - in: path
+    name: device_id
+    required: true
+    type: integer
+    description: The ID of the device
+responses:
+  200:
+    description: List of sensors
+    schema:
+      type: object
+      properties:
+        sensors:
+          type: array
+          items:
+            type: object
+            properties:
+              sensor_id:
+                type: integer
+                example: 101
+  404:
+    description: User not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User not found."

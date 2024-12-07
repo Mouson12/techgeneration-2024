@@ -1,0 +1,50 @@
+# swagger_templates/change_profile.yml
+---
+tags:
+  - User
+summary: Change user profile
+description: Updates the current user's email and/or password.
+operationId: changeProfile
+parameters:
+  - in: body
+    name: body
+    required: true
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "new.email@example.com"
+          description: The new email address for the user.
+        password:
+          type: string
+          example: "NewSecurePassword123!"
+          description: The new password for the user.
+      required:
+        - email
+        - password
+responses:
+  200:
+    description: Profile updated successfully.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Profile updated successfully."
+  400:
+    description: Bad request.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Either email or password must be provided."
+  404:
+    description: User not found.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User not found."

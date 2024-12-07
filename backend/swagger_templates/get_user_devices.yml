@@ -1,0 +1,34 @@
+# swagger_templates/get_user_devices.yml
+---
+tags:
+  - User Devices
+summary: Get user devices
+description: Returns a list of devices associated with the authenticated user.
+operationId: getUserDevices
+produces:
+  - application/json
+responses:
+  200:
+    description: List of user devices
+    schema:
+      type: object
+      properties:
+        devices:
+          type: array
+          items:
+            type: object
+            properties:
+              device_id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: "Smart Inhaler"
+  404:
+    description: User not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User not found."

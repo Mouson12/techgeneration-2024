@@ -1,0 +1,45 @@
+# swagger_templates/register.yml
+---
+tags:
+  - Auth
+summary: Register a new user
+description: Endpoint to register a new user by providing username, email, and password.
+operationId: registerUser
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - in: body
+    name: user
+    description: User details
+    required: true
+    schema:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "john_doe"
+        email:
+          type: string
+          example: "john@example.com"
+        password:
+          type: string
+          example: "password123"
+responses:
+  201:
+    description: User registered successfully.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "User registered successfully."
+  400:
+    description: Missing or invalid data.
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Username, email, and password are required."
