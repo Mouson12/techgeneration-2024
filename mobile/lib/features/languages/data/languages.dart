@@ -1,0 +1,1 @@
+enum BBLanguages { en, pl }

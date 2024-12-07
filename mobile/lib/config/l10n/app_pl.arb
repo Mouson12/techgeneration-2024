@@ -1,0 +1,44 @@
+{
+    "@@locale": "pl",
+    "appTitle": "Back Buddy",
+    "homePageWelcomeText": "Cześć, {name}!",
+    "@homePageWelcomeText":{
+        "description": "Welcome text",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "name"
+            }
+        }},
+    "homePageTodaySession": "Następna dawka:",
+    "homePageGoodPosture": "Dobra postura",
+    "homePageBadPosture": "Zła postura",
+    "homePageBreakTime": "Czas przerwy",
+    "homePageWidgetGood": "Twoja postawa jest świetna, tak trzymaj!",
+    "homePageWidgetBreakTime": "Myślę, że to czas na kawę ☕",
+    "homePageWidgetBad": "Twoja postawa wymaga poprawy. Spróbuj to zmienić!",
+    "homePageWidgetSubTitle": "Dzisiaj zdobyłeś już",
+    "homePageWidgetPoints": "{points} punktów",
+    "@homePageWidgetPoints":{
+        "description": "Points",
+        "placeholders": {
+            "points": {
+                "type": "int",
+                "example": "1250"
+            }
+        }},
+    "februaryShort": "Lut",
+    "marchShort": "Mar",
+    "aprilShort": "Kwi",
+    "points": "punkty",
+    "infoText": "Poznaj Back Buddy! Nasza aplikacja rewolucjonizuje pracę biurową, wspierając zdrowie psychiczne i fizyczne. To nie tylko monitorowanie postawy i przerw - Back Buddy to Twoje wsparcie, dbające o komfort i zdrowie.Dzięki zaawansowanej technologii rozpoznawania postawy, wspiera dobre nawyki siedzenia, a także dodaje odrobinę zabawy dzięki grywalizacji. Rywalizuj z kolegami, aby zobaczyć, kto utrzymuje najlepszą postawę i bierze najwięcej przerw. Back Buddy zamienia dbałość o zdrowie w grę, sprawiając, że stajesz się mistrzem ergonomii!Priorytetem jest dla nas także zdrowie psychiczne, dlatego wspieramy relacje między współpracownikami poprzez przyjazną rywalizację. Dołącz do nas i ciesz się produktywnym, wspierającym środowiskiem pracy z Back Buddy!",
+    "logOut": "Wyloguj się",
+    "logIn": "Zaloguj się",
+    "invalidText": "Nieprawidłowy login lub hasło",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "takenMeds": "Leki zostały wzięte.",
+    "medsToTake": "Leki powinny zostać wzięte.",
+    "nextDose": "Następna dawka za",
+    "lateDose": "Dawka jest opóźniona o:"
+}
