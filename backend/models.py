@@ -33,6 +33,23 @@ class Medications(db.Model):
     def __repr__(self):
         return f"<Medications(id={self.id}, last_dose={self.last_dose}, next_dose={self.next_dose}, delay_minutes={self.delay_minutes})>"
     
+
+class Temperature(db.Model):
+    __tablename__ = 'temperature'
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Float, nullable=False)  # Temperature value in Celsius
+    
+    def __repr__(self):
+        return f"<Temperature(id={self.id}, value={self.value}, timestamp={self.timestamp})>"
+
+class PulseOximeter(db.Model):
+    __tablename__ = 'pulse_oximeter'
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Float, nullable=False)  # Oxygen saturation percentage (SpO2)
+
+    def __repr__(self):
+        return f"<PulseOximeter(id={self.id}, value={self.value}, pulse_rate={self.pulse_rate}, timestamp={self.timestamp})>"
+    
 class MedsTaken(db.Model):
     __tablename__ = 'meds_taken'
     id = db.Column(db.Integer, primary_key=True)

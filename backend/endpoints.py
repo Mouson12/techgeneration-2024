@@ -1,7 +1,7 @@
 # endpoints.py
 from flask import request, jsonify, Blueprint
 from datetime import datetime, timezone
-from models import db, Drawer, Alarm, Medications
+from models import db, Drawer, Alarm, Medications, Temperature, PulseOximeter
 
 # Create a Blueprint for routes
 api = Blueprint('api', __name__)
@@ -75,6 +75,58 @@ def get_medication():
             'delay_minutes': medication.delay_minutes
         }), 200
     return jsonify({'message': 'Medication not found'}), 404
+
+
+# Temperature endpoint
+@api.route('/temperature', methods=['GET', 'POST'])
+def manage_temperature():
+    if request.method == 'POST':
+        data = request.get_json()
+        value = data.get('value')
+        
+        if value is None:
+            return jsonify({'message': 'Temperature value is required'}), 400
+        
+        # Create a new temperature entry
+        temperature = Temperature(value=value)
+        db.session.add(temperature)
+        db.session.commit()
+        
+        print(f"Temperature data saved: {value}")
+        return jsonify({'message': 'Temperature data saved'}), 201
+    
+    # GET request to get the latest temperature
+    temperature = Temperature.query.order_by(Temperature.id.desc()).first()
+    if temperature:
+        return jsonify({'value': temperature.value}), 200
+    return jsonify({'message': 'No temperature data found'}), 404
+
+
+# Pulse Oximeter endpoint
+@api.route('/Pulsometr', methods=['GET', 'POST'])
+def manage_pulse_oximeter():
+    if request.method == 'POST':
+        data = request.get_json()
+        value = data.get('value')
+        
+        if value is None :
+            return jsonify({'message': 'Oxygen saturation and pulse rate are required'}), 400
+        
+        # Create a new pulse oximeter entry
+        pulse_oximeter = PulseOximeter(value=value)
+        db.session.add(pulse_oximeter)
+        db.session.commit()
+        
+        return jsonify({'message': 'Pulse oximeter data saved'}), 201
+    
+    # GET request to get the latest pulse oximeter data
+    pulse_oximeter = PulseOximeter.query.order_by(PulseOximeter.id.desc()).first()
+    if pulse_oximeter:
+        return jsonify({
+            'value': pulse_oximeter.value,
+        }), 200
+    return jsonify({'message': 'No pulse oximeter data found'}), 404
+
 
 
 #ToDo: meds_taken edpoint fix
