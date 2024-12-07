@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import JWTManager, create_access_token
 from datetime import timedelta
@@ -26,7 +26,7 @@ class Alarm(db.Model):
 class Medications(db.Model):
     __tablename__ = 'medications'
     id = db.Column(db.Integer, primary_key=True)
-    last_dose = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))  # Timestamp of last dose
+    last_dose = db.Column(db.DateTime, nullable=False, default=datetime.now() + timedelta(hours=1) )  # Timestamp of last dose
     next_dose = db.Column(db.DateTime, nullable=False)  # Timestamp of next dose
     delay_minutes = db.Column(db.Integer, nullable=False)  # Delay in minutes
     
@@ -38,7 +38,7 @@ class Temperature(db.Model):
     __tablename__ = 'temperature'
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.Float, nullable=False)  # Temperature value in Celsius
-    
+
     def __repr__(self):
         return f"<Temperature(id={self.id}, value={self.value}, timestamp={self.timestamp})>"
 
@@ -50,6 +50,9 @@ class PulseOximeter(db.Model):
     def __repr__(self):
         return f"<PulseOximeter(id={self.id}, value={self.value}, pulse_rate={self.pulse_rate}, timestamp={self.timestamp})>"
     
+
+
+
 class MedsTaken(db.Model):
     __tablename__ = 'meds_taken'
     id = db.Column(db.Integer, primary_key=True)

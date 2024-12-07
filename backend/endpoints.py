@@ -1,10 +1,16 @@
 # endpoints.py
 from flask import request, jsonify, Blueprint
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from models import db, Drawer, Alarm, Medications, Temperature, PulseOximeter
+import pytz
+
+GMT = pytz.timezone("Etc/GMT")
+
+# utc_plus_2 = pytz.timezone('Etc/GMT-2')
 
 # Create a Blueprint for routes
 api = Blueprint('api', __name__)
+
 
 # Drawer endpoint
 @api.route('/drawer', methods=['GET', 'POST'])
@@ -13,18 +19,33 @@ def manage_drawer():
         data = request.get_json()
         is_open = data.get('is_open', False)
         
-        # Create a new drawer state
-        drawer = Drawer(is_open=is_open)
-        db.session.add(drawer)
+        # Pobierz ostatni stan szuflady
+        last_drawer = Drawer.query.order_by(Drawer.id.desc()).first()
+
+        # Sprawdź, czy poprzedni stan był otwarty (1), a nowy jest zamknięty (0)
+        if last_drawer and last_drawer.is_open == 1 and is_open == 0:
+            # Pobierz rekord z tabeli medications
+            medication = Medications.query.order_by(Medications.id.desc()).first()
+            if medication:
+                # Aktualizuj pola last_dose, next_dose i delay
+                medication.last_dose = medication.next_dose
+                medication.next_dose = datetime.now() + timedelta(hours=1) + timedelta(minutes=2)
+                medication.delay_minutes = 0
+                db.session.commit()
+
+        # Zapisz nowy stan szuflady
+        new_drawer = Drawer(is_open=is_open)
+        db.session.add(new_drawer)
         db.session.commit()
         
         return jsonify({'message': 'Drawer state saved'}), 201
     
     # GET request to get the last state of the drawer
-    drawer = Drawer.query.order_by(Drawer.id.desc()).first()
-    if drawer:
-        return jsonify({'is_open': drawer.is_open}), 200
+    last_drawer = Drawer.query.order_by(Drawer.id.desc()).first()
+    if last_drawer:
+        return jsonify({'is_open': last_drawer.is_open}), 200
     return jsonify({'message': 'No drawer state found'}), 404
+
 
 # Alarm endpoint
 @api.route('/alarm', methods=['GET', 'POST'])
@@ -50,7 +71,7 @@ def manage_alarm():
 @api.route('/medications', methods=['POST'])
 def manage_medications():
     data = request.get_json()
-    last_dose = data.get('last_dose', datetime.utcnow())
+    last_dose = data.get('last_dose', datetime.now() + timedelta(hours=1))
     next_dose = data.get('next_dose')
     delay_minutes = data.get('delay_minutes')
     
@@ -92,7 +113,6 @@ def manage_temperature():
         db.session.add(temperature)
         db.session.commit()
         
-        print(f"Temperature data saved: {value}")
         return jsonify({'message': 'Temperature data saved'}), 201
     
     # GET request to get the latest temperature
@@ -127,6 +147,46 @@ def manage_pulse_oximeter():
         }), 200
     return jsonify({'message': 'No pulse oximeter data found'}), 404
 
+@api.route('/current-time', methods=['GET'])
+def get_current_time():
+    current_time = datetime.now() + timedelta(hours=1)  # Z oznacza czas UTC
+    return jsonify({'current_time': current_time}), 200
+
+
+# Click endpoint
+@api.route('/click', methods=['POST'])
+def handle_click():
+    data = request.get_json()
+    value = data.get('value')
+
+    if value is None:
+        return jsonify({'message': 'Value is required'}), 400
+
+    if value == 1:
+        # Pobierz ostatni rekord w tabeli Medications
+        medication = Medications.query.order_by(Medications.id.desc()).first()
+        if not medication:
+            return jsonify({'message': 'No medication data found'}), 404
+        
+        # Zwiększ delay_minutes o 15 sekund
+        medication.delay_minutes += 1  # 15 sekund = 0.25 minut
+        db.session.commit()
+
+        return jsonify({'message': 'Delay increased by 15 seconds'}), 200
+
+    elif value == 3:
+        # Utwórz nowy alarm lub zaktualizuj istniejący rekord
+        alarm = Alarm.query.order_by(Alarm.id.desc()).first()
+        if not alarm:
+            alarm = Alarm(fall_detected=True)
+            db.session.add(alarm)
+        else:
+            alarm.fall_detected = True
+        db.session.commit()
+
+        return jsonify({'message': 'Alarm set to true'}), 200
+
+    return jsonify({'message': 'Invalid value'}), 400
 
 
 #ToDo: meds_taken edpoint fix
@@ -140,6 +200,6 @@ def check_meds_taken():
         return jsonify({'meds_taken': False}), 404
     
     # Sprawdź, czy aktualny czas >= next_dose
-    meds_taken = datetime.now(timezone.utc) >= medication.next_dose
+    meds_taken = datetime.now() + timedelta(hours=1) >= medication.next_dose
     
     return jsonify({'meds_taken': meds_taken}), 200
