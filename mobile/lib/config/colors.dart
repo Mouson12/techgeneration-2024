@@ -11,6 +11,8 @@ class AUColors {
 
   static Color error = const Color(0xffC00012);
 
+  static Color statsPurple = const Color(0xff473198);
+
   // Home page status colors
   static Color greenStatus = const Color(0xff39C899);
   static Color pinkStatus = const Color(0xffFE4992);

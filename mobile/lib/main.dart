@@ -5,6 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:office_app/config/l10n/localizations.dart';
 import 'package:office_app/config/theme.dart';
 import 'package:office_app/features/application/users/cubit/ranking_cubit.dart';
+import 'package:office_app/features/common/widgets/splash_screen.dart';
+import 'package:office_app/features/data/cubit/alarm_cubit.dart';
+import 'package:office_app/features/data/cubit/medication_cubit.dart';
+import 'package:office_app/features/data/cubit/sensor_cubit.dart';
 import 'package:office_app/features/http_header/header_cubit.dart';
 import 'package:office_app/features/languages/cubit/language_cubit.dart';
 import 'package:office_app/features/languages/data/languages.dart';
@@ -36,6 +40,15 @@ class MainApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HeaderCubit(),
         ),
+        BlocProvider(
+          create: (context) => MedicationCubit()..loadData(),
+        ),
+        BlocProvider(
+          create: (context) => SensorCubit()..loadData(),
+        ),
+        BlocProvider(
+          create: (context) => AlarmCubit(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(320, 568),
@@ -46,11 +59,10 @@ class MainApp extends StatelessWidget {
             return MaterialApp(
               supportedLocales: AppLocalizations.supportedLocales,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
-              // Handle language change
               locale: state == BBLanguages.en
                   ? const Locale('en')
                   : const Locale('pl'),
-              home: const MainPage(),
+              home: const SplashScreen(), // Show SplashScreen first
               theme: BBTheme.theme,
               routes: {
                 '/login-page': (context) => const LoginPage(),
